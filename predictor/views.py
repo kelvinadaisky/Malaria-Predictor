@@ -7,8 +7,8 @@ from geopy.geocoders import Nominatim
 from django.shortcuts import render
 from .forms import CountryForm
 from django.core.cache import cache
-
-
+import psutil
+import os
 
 # Load preprocessor and model
 preprocessor = joblib.load('preprocessor.pkl')
@@ -20,14 +20,17 @@ weather_api_key = '237c75a26646cfb183bca03f1662cbfd'
 geocoding_api_key = 'e7db2f2a540c47afa09af361d40f1222'
 
 # Load malaria data from WHO
-malaria_data = pd.read_csv('merged_without_city_1.csv')
-malaria_data = malaria_data[['Country','ISO', 'Year', 'Deaths', 'Mortality_Rate', 'Malaria_incidence']]
+malaria_data = pd.read_csv('merged_without_city_1.csv', usecols=['Country', 'ISO', 'Year', 'Deaths', 'Mortality_Rate', 'Malaria_incidence'])
 # Create a dictionary for country name to ISO code mapping
 country_to_iso = dict(zip(malaria_data['Country'].str.lower(), malaria_data['ISO']))
 
+# Function to log memory usage
+def log_memory_usage():
+    process = psutil.Process(os.getpid())
+    print(f"Memory usage: {process.memory_info().rss / (1024 * 1024):.2f} MB")
+
 # Function to get weather data
 def get_weather_data(latitude, longitude, api_key):
-    # OpenWeather API for 5-day forecast
     url = f"http://api.openweathermap.org/data/2.5/forecast?lat={latitude}&lon={longitude}&appid={api_key}&units=metric"
     response = requests.get(url)
     
@@ -39,11 +42,9 @@ def get_weather_data(latitude, longitude, api_key):
     if 'list' not in data:
         raise KeyError("Forecast data not found in API response.")
     
-    # Calculate the average temperature for the next 30 days
     temperatures = [item['main']['temp'] for item in data['list']]
     avg_temp_c = sum(temperatures) / len(temperatures)
     
-    # Get the precipitation data
     precipitation_mm = 0
     for item in data['list']:
         precipitation_mm += item.get('rain', {}).get('3h', 0)
@@ -101,7 +102,6 @@ def get_lat_lon_continent(country_name, api_key):
     else:
         print(f"Could not get geolocation for {country_name}. Response: {data}")
         return None, None, None
-    
 
 def malaria_risk_map(request):
     return render(request, 'predictor/malaria_risk_map.html')
@@ -121,7 +121,6 @@ def get_country_info(country_code, country_name):
         'Continent': continent
     }
     
-    # Fetch and handle possible missing data
     try:
         population = get_world_bank_data(country_code, 'SP.POP.TOTL') or 0
         gdp = get_world_bank_data(country_code, 'NY.GDP.MKTP.CD') or 0
@@ -143,7 +142,6 @@ def get_country_info(country_code, country_name):
         print(e)
         return None
     
-    # Get weather data
     try:
         avg_temp_c, precipitation_mm = get_weather_data(latitude, longitude, weather_api_key)
         country_info['avg_temp_c'] = avg_temp_c
@@ -158,7 +156,6 @@ def get_country_info(country_code, country_name):
 def predict_malaria(user_data):
     user_data_preprocessed = preprocessor.transform(user_data)
     prediction = model.predict(user_data_preprocessed)
-    # Set negative predictions to zero
     prediction = max(prediction[0], 0)
     return prediction
 
@@ -170,7 +167,6 @@ def assess_safety(malaria_cases):
         return "Medium risk"
     else:
         return "High risk"
-
 
 def index(request):
     if request.method == 'POST':
@@ -196,6 +192,27 @@ def index(request):
 
     return render(request, 'predictor/index.html', {'form': form})
 
+# Function to process countries in batches
+def process_countries_in_batches(batch_size=10):
+    country_risks = []
+    countries = list(country_to_iso.items())
+    for i in range(0, len(countries), batch_size):
+        batch = countries[i:i+batch_size]
+        for country, iso in batch:
+            try:
+                country_info = get_country_info(iso, country.title())
+                if not country_info:
+                    continue
+
+                user_data = pd.DataFrame([country_info])
+                malaria_cases = predict_malaria(user_data)
+                country_risks.append((country.title(), malaria_cases, country_info['Latitude'], country_info['Longitude']))
+            except Exception as e:
+                print(f"Error processing {country}: {e}")
+                continue
+        log_memory_usage()  # Log memory usage after each batch
+    return country_risks
+
 # Function to generate a map for the top 10 countries with high risk of malaria outbreaks
 def show_top10_map(request):
     cached_map = cache.get('top10_map')
@@ -206,20 +223,8 @@ def show_top10_map(request):
     world_map = folium.Map(location=[0, 0], zoom_start=2)
     marker_cluster = MarkerCluster().add_to(world_map)
 
-    # Sort countries by the highest predicted malaria cases
-    country_risks = []
-    for country, iso in country_to_iso.items():
-        try:
-            country_info = get_country_info(iso, country.title())
-            if not country_info:
-                continue
-
-            user_data = pd.DataFrame([country_info])
-            malaria_cases = predict_malaria(user_data)
-            country_risks.append((country.title(), malaria_cases, country_info['Latitude'], country_info['Longitude']))
-        except Exception as e:
-            print(f"Error processing {country}: {e}")
-            continue
+    # Process countries in batches
+    country_risks = process_countries_in_batches()
 
     # Sort and select top 10 countries
     country_risks.sort(key=lambda x: x[1], reverse=True)
@@ -254,32 +259,26 @@ def show_all_map(request):
     world_map = folium.Map(location=[0, 0], zoom_start=2)
     marker_cluster = MarkerCluster().add_to(world_map)
 
-    for country, iso in country_to_iso.items():
-        try:
-            country_info = get_country_info(iso, country.title())
-            if not country_info:
-                continue
+    # Process countries in batches
+    country_risks = process_countries_in_batches()
 
-            user_data = pd.DataFrame([country_info])
-            malaria_cases = predict_malaria(user_data)
-            risk_level = assess_safety(malaria_cases)
+    for country, malaria_cases, lat, lon in country_risks:
+        risk_level = assess_safety(malaria_cases)
 
-            if risk_level == "High risk":
-                color = 'red'
-            elif risk_level == "Medium risk":
-                color = 'orange'
-            else:
-                color = 'green'
+        if risk_level == "High risk":
+            color = 'red'
+        elif risk_level == "Medium risk":
+            color = 'orange'
+        else:
+            color = 'green'
 
-            folium.Marker(
-                location=[country_info['Latitude'], country_info['Longitude']],
-                popup=f"{country.title()}: {risk_level}",
-                icon=folium.Icon(color=color)
-            ).add_to(marker_cluster)
-        except Exception as e:
-            print(f"Error processing {country}: {e}")
-            continue
+        folium.Marker(
+            location=[lat, lon],
+            popup=f"{country}: {risk_level}",
+            icon=folium.Icon(color=color)
+        ).add_to(marker_cluster)
 
     world_map.save('predictor/static/predictor/malaria_all_map.html')
     cache.set('all_map', 'predictor/static/predictor/malaria_all_map.html', timeout=60*60*24)  # Cache for 24 hours
     return render(request, 'predictor/malaria_all_map.html')
+
