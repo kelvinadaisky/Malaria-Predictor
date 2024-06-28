@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_3f3eac2bb143c1f71c552a88556b6efc {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_3f3eac2bb143c1f71c552a88556b6efc" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_3f3eac2bb143c1f71c552a88556b6efc = L.map(
+                "map_3f3eac2bb143c1f71c552a88556b6efc",
+                {
+                    center: [0.0, 0.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 2,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_7fa529fe5509af1dee5b1882e355c386 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_7fa529fe5509af1dee5b1882e355c386.addTo(map_3f3eac2bb143c1f71c552a88556b6efc);
+        
+    
+            var marker_cluster_b433fc73233aaa3540676b87d775bb99 = L.markerClusterGroup(
+                {}
+            );
+        
+    
+            var marker_99fdb3ed1bf016a917ae25c422445ea3 = L.marker(
+                [33.7680065, 66.2385139],
+                {}
+            ).addTo(marker_cluster_b433fc73233aaa3540676b87d775bb99);
+        
+    
+            var icon_4bd69d2fab298e6a4e015d53964603c2 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_99fdb3ed1bf016a917ae25c422445ea3.setIcon(icon_4bd69d2fab298e6a4e015d53964603c2);
+        
+    
+        var popup_ea7dd9c06a15f104e1d73e46fbb16a58 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_650d58f16f61245fc0f873989123ad8e = $(`<div id="html_650d58f16f61245fc0f873989123ad8e" style="width: 100.0%; height: 100.0%;">Afghanistan: High risk</div>`)[0];
+                popup_ea7dd9c06a15f104e1d73e46fbb16a58.setContent(html_650d58f16f61245fc0f873989123ad8e);
+            
+        
+
+        marker_99fdb3ed1bf016a917ae25c422445ea3.bindPopup(popup_ea7dd9c06a15f104e1d73e46fbb16a58)
+        ;
+
+        
+    
+    
+            var marker_b0a1252ea41483b1c11c76056b7f7bdf = L.marker(
+                [11.244803399999999, -72.51609706675976],
+                {}
+            ).addTo(marker_cluster_b433fc73233aaa3540676b87d775bb99);
+        
+    
+            var icon_17425b76492d059c503f1dbf334b269c = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_b0a1252ea41483b1c11c76056b7f7bdf.setIcon(icon_17425b76492d059c503f1dbf334b269c);
+        
+    
+        var popup_ba6d60dfe79e308b9ad30dbcc3b6e13a = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_1b2e79b2b2ed388897f9db64506c1f7b = $(`<div id="html_1b2e79b2b2ed388897f9db64506c1f7b" style="width: 100.0%; height: 100.0%;">Albania: High risk</div>`)[0];
+                popup_ba6d60dfe79e308b9ad30dbcc3b6e13a.setContent(html_1b2e79b2b2ed388897f9db64506c1f7b);
+            
+        
+
+        marker_b0a1252ea41483b1c11c76056b7f7bdf.bindPopup(popup_ba6d60dfe79e308b9ad30dbcc3b6e13a)
+        ;
+
+        
+    
+    
+            var marker_e1e083103566cb1fb9bd7f728589e2ec = L.marker(
+                [28.0000272, 2.9999825],
+                {}
+            ).addTo(marker_cluster_b433fc73233aaa3540676b87d775bb99);
+        
+    
+            var icon_22b01e518e3b01ae862d705284287617 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_e1e083103566cb1fb9bd7f728589e2ec.setIcon(icon_22b01e518e3b01ae862d705284287617);
+        
+    
+        var popup_3c0bc9700e5ac2706b308737eb64909f = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_41f20f70e116b45c3efb5841ba72b1a8 = $(`<div id="html_41f20f70e116b45c3efb5841ba72b1a8" style="width: 100.0%; height: 100.0%;">Algeria: Low risk</div>`)[0];
+                popup_3c0bc9700e5ac2706b308737eb64909f.setContent(html_41f20f70e116b45c3efb5841ba72b1a8);
+            
+        
+
+        marker_e1e083103566cb1fb9bd7f728589e2ec.bindPopup(popup_3c0bc9700e5ac2706b308737eb64909f)
+        ;
+
+        
+    
+    
+            var marker_ee217209289132124287658f03f32bcf = L.marker(
+                [42.5407167, 1.5732033],
+                {}
+            ).addTo(marker_cluster_b433fc73233aaa3540676b87d775bb99);
+        
+    
+            var icon_6e4bf66fe91fe395f614baa765639932 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_ee217209289132124287658f03f32bcf.setIcon(icon_6e4bf66fe91fe395f614baa765639932);
+        
+    
+        var popup_b1781a224dcb5ae14e23670ba578b84d = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_a0d5db8efdf6691b64d8a5cbb8e16886 = $(`<div id="html_a0d5db8efdf6691b64d8a5cbb8e16886" style="width: 100.0%; height: 100.0%;">Andorra: Medium risk</div>`)[0];
+                popup_b1781a224dcb5ae14e23670ba578b84d.setContent(html_a0d5db8efdf6691b64d8a5cbb8e16886);
+            
+        
+
+        marker_ee217209289132124287658f03f32bcf.bindPopup(popup_b1781a224dcb5ae14e23670ba578b84d)
+        ;
+
+        
+    
+    
+            var marker_e6afbdc0142fb6ad8f1aee04009a57bd = L.marker(
+                [-11.8775768, 17.5691241],
+                {}
+            ).addTo(marker_cluster_b433fc73233aaa3540676b87d775bb99);
+        
+    
+            var icon_a4fc33f2fb77408d337c6d4f6f5c5367 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_e6afbdc0142fb6ad8f1aee04009a57bd.setIcon(icon_a4fc33f2fb77408d337c6d4f6f5c5367);
+        
+    
+        var popup_2e0ecb913c7d29f79d52c7c15d1d0842 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_11baecc5a296dec67cf7be53a51eb58f = $(`<div id="html_11baecc5a296dec67cf7be53a51eb58f" style="width: 100.0%; height: 100.0%;">Angola: High risk</div>`)[0];
+                popup_2e0ecb913c7d29f79d52c7c15d1d0842.setContent(html_11baecc5a296dec67cf7be53a51eb58f);
+            
+        
+
+        marker_e6afbdc0142fb6ad8f1aee04009a57bd.bindPopup(popup_2e0ecb913c7d29f79d52c7c15d1d0842)
+        ;
+
+        
+    
+    
+            marker_cluster_b433fc73233aaa3540676b87d775bb99.addTo(map_3f3eac2bb143c1f71c552a88556b6efc);
+        
+</script>
+</html>

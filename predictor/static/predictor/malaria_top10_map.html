@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_f3ec97b2351aa6efe3fc04379ab2ae45 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_f3ec97b2351aa6efe3fc04379ab2ae45" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_f3ec97b2351aa6efe3fc04379ab2ae45 = L.map(
+                "map_f3ec97b2351aa6efe3fc04379ab2ae45",
+                {
+                    center: [0.0, 0.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 2,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_ca372a19a112a34f0733146b2f368807 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_ca372a19a112a34f0733146b2f368807.addTo(map_f3ec97b2351aa6efe3fc04379ab2ae45);
+        
+    
+            var marker_cluster_5763ecf275eb1f412d01d4e981a206df = L.markerClusterGroup(
+                {}
+            );
+        
+    
+            var marker_4aa70f7e0908dd40b279012bce3776df = L.marker(
+                [-2.9814344, 23.8222636],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_f780e73bb8721780cf70d2e5b23e78fe = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_4aa70f7e0908dd40b279012bce3776df.setIcon(icon_f780e73bb8721780cf70d2e5b23e78fe);
+        
+    
+        var popup_c5c5c9bd3af573e661044effe04a25ac = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_97586852cb99e554ca6f3dacc44384ab = $(`<div id="html_97586852cb99e554ca6f3dacc44384ab" style="width: 100.0%; height: 100.0%;">Democratic Republic Of The Congo: High risk</div>`)[0];
+                popup_c5c5c9bd3af573e661044effe04a25ac.setContent(html_97586852cb99e554ca6f3dacc44384ab);
+            
+        
+
+        marker_4aa70f7e0908dd40b279012bce3776df.bindPopup(popup_c5c5c9bd3af573e661044effe04a25ac)
+        ;
+
+        
+    
+    
+            var marker_0d4e8287ed575fc2ee93c83a8370704b = L.marker(
+                [9.6000359, 7.9999721],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_c10210c80f5e3d44c7ed907d0bee7a2f = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_0d4e8287ed575fc2ee93c83a8370704b.setIcon(icon_c10210c80f5e3d44c7ed907d0bee7a2f);
+        
+    
+        var popup_3dcacac479e20372b5261f789a4040f9 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_3f5ee584e5c09a0a7f6a2d9256acddca = $(`<div id="html_3f5ee584e5c09a0a7f6a2d9256acddca" style="width: 100.0%; height: 100.0%;">Nigeria: High risk</div>`)[0];
+                popup_3dcacac479e20372b5261f789a4040f9.setContent(html_3f5ee584e5c09a0a7f6a2d9256acddca);
+            
+        
+
+        marker_0d4e8287ed575fc2ee93c83a8370704b.bindPopup(popup_3dcacac479e20372b5261f789a4040f9)
+        ;
+
+        
+    
+    
+            var marker_d8f054f1dfbfa22902f3fe5c7f51f5ea = L.marker(
+                [-19.302233, 34.9144977],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_6302915558ffdee6c19c650a208a9bd7 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_d8f054f1dfbfa22902f3fe5c7f51f5ea.setIcon(icon_6302915558ffdee6c19c650a208a9bd7);
+        
+    
+        var popup_22878557032f57bb69096a012a55a099 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_64df9360c70a80589f49c8bf32bd5a4e = $(`<div id="html_64df9360c70a80589f49c8bf32bd5a4e" style="width: 100.0%; height: 100.0%;">Mozambique: High risk</div>`)[0];
+                popup_22878557032f57bb69096a012a55a099.setContent(html_64df9360c70a80589f49c8bf32bd5a4e);
+            
+        
+
+        marker_d8f054f1dfbfa22902f3fe5c7f51f5ea.bindPopup(popup_22878557032f57bb69096a012a55a099)
+        ;
+
+        
+    
+    
+            var marker_a31d6c434371162238db774d7ae21c2e = L.marker(
+                [1.5333554, 32.2166578],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_a3810d7e8c96c8c14548a61b98dff634 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_a31d6c434371162238db774d7ae21c2e.setIcon(icon_a3810d7e8c96c8c14548a61b98dff634);
+        
+    
+        var popup_b404d7a8ca532c10dd244f8624163730 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_3d417463b184862d86ea4cb0a7061c24 = $(`<div id="html_3d417463b184862d86ea4cb0a7061c24" style="width: 100.0%; height: 100.0%;">Uganda: High risk</div>`)[0];
+                popup_b404d7a8ca532c10dd244f8624163730.setContent(html_3d417463b184862d86ea4cb0a7061c24);
+            
+        
+
+        marker_a31d6c434371162238db774d7ae21c2e.bindPopup(popup_b404d7a8ca532c10dd244f8624163730)
+        ;
+
+        
+    
+    
+            var marker_f569185a5f78fff2cee2fa3dd54ce940 = L.marker(
+                [12.0753083, -1.6880314],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_5b27dd3c36a65c093da48f17c8aa0e83 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_f569185a5f78fff2cee2fa3dd54ce940.setIcon(icon_5b27dd3c36a65c093da48f17c8aa0e83);
+        
+    
+        var popup_4124d0ad51c7e3b360bccfb4df1a5d4a = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_24a72945ebc493a8ad5df1288bce771d = $(`<div id="html_24a72945ebc493a8ad5df1288bce771d" style="width: 100.0%; height: 100.0%;">Burkina Faso: High risk</div>`)[0];
+                popup_4124d0ad51c7e3b360bccfb4df1a5d4a.setContent(html_24a72945ebc493a8ad5df1288bce771d);
+            
+        
+
+        marker_f569185a5f78fff2cee2fa3dd54ce940.bindPopup(popup_4124d0ad51c7e3b360bccfb4df1a5d4a)
+        ;
+
+        
+    
+    
+            var marker_cc4091a54ee2a939be75f8811a0d5c11 = L.marker(
+                [-11.8775768, 17.5691241],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_ef59d8448f721106559c922e186ba374 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_cc4091a54ee2a939be75f8811a0d5c11.setIcon(icon_ef59d8448f721106559c922e186ba374);
+        
+    
+        var popup_21dd56b854c9b8793a5a60aa0ca5bbfe = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_9cbcedaf14745ee50d626a8824f407f0 = $(`<div id="html_9cbcedaf14745ee50d626a8824f407f0" style="width: 100.0%; height: 100.0%;">Angola: High risk</div>`)[0];
+                popup_21dd56b854c9b8793a5a60aa0ca5bbfe.setContent(html_9cbcedaf14745ee50d626a8824f407f0);
+            
+        
+
+        marker_cc4091a54ee2a939be75f8811a0d5c11.bindPopup(popup_21dd56b854c9b8793a5a60aa0ca5bbfe)
+        ;
+
+        
+    
+    
+            var marker_1a8543b9d67dcb6445f0d317ef139f7c = L.marker(
+                [7.9897371, -5.5679458],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_7e08d647ed1accd938788df473a56d2e = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_1a8543b9d67dcb6445f0d317ef139f7c.setIcon(icon_7e08d647ed1accd938788df473a56d2e);
+        
+    
+        var popup_fa1f173e8a755db0c798aca4c0ecf2bf = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_caf35c9c19fcea40b96550a4ec50c8ce = $(`<div id="html_caf35c9c19fcea40b96550a4ec50c8ce" style="width: 100.0%; height: 100.0%;">Ivory Coast: High risk</div>`)[0];
+                popup_fa1f173e8a755db0c798aca4c0ecf2bf.setContent(html_caf35c9c19fcea40b96550a4ec50c8ce);
+            
+        
+
+        marker_1a8543b9d67dcb6445f0d317ef139f7c.bindPopup(popup_fa1f173e8a755db0c798aca4c0ecf2bf)
+        ;
+
+        
+    
+    
+            var marker_d3ceddaecf3ed7b9ed34b66e85cdd846 = L.marker(
+                [-14.5189121, 27.5589884],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_6a70f5efb1347067c3f41033c82286e5 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_d3ceddaecf3ed7b9ed34b66e85cdd846.setIcon(icon_6a70f5efb1347067c3f41033c82286e5);
+        
+    
+        var popup_2909fe2e09fe79eac181555a0bfb3874 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_7117a828d432ea5cd47b69b0a38fbfcb = $(`<div id="html_7117a828d432ea5cd47b69b0a38fbfcb" style="width: 100.0%; height: 100.0%;">Zambia: High risk</div>`)[0];
+                popup_2909fe2e09fe79eac181555a0bfb3874.setContent(html_7117a828d432ea5cd47b69b0a38fbfcb);
+            
+        
+
+        marker_d3ceddaecf3ed7b9ed34b66e85cdd846.bindPopup(popup_2909fe2e09fe79eac181555a0bfb3874)
+        ;
+
+        
+    
+    
+            var marker_bbd0dd8944807cfae3753ddda453f350 = L.marker(
+                [-3.426449, 29.9324519],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_12d1de10ef58d3180b2d33f76488764e = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_bbd0dd8944807cfae3753ddda453f350.setIcon(icon_12d1de10ef58d3180b2d33f76488764e);
+        
+    
+        var popup_c1c7af66ed8acb0cab91283167ad056a = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_ec550a72ea7a3a4184700da061214168 = $(`<div id="html_ec550a72ea7a3a4184700da061214168" style="width: 100.0%; height: 100.0%;">Burundi: High risk</div>`)[0];
+                popup_c1c7af66ed8acb0cab91283167ad056a.setContent(html_ec550a72ea7a3a4184700da061214168);
+            
+        
+
+        marker_bbd0dd8944807cfae3753ddda453f350.bindPopup(popup_c1c7af66ed8acb0cab91283167ad056a)
+        ;
+
+        
+    
+    
+            var marker_d3aa631e2b73f807f41ad2925ee64884 = L.marker(
+                [8.0300284, -1.0800271],
+                {}
+            ).addTo(marker_cluster_5763ecf275eb1f412d01d4e981a206df);
+        
+    
+            var icon_aaf42f3284293aaef2bf3a42b36a598e = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_d3aa631e2b73f807f41ad2925ee64884.setIcon(icon_aaf42f3284293aaef2bf3a42b36a598e);
+        
+    
+        var popup_5ed7dcc045b446b259031b750b38f92f = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_a5a76b8da2f812c2dbf139345784fe7a = $(`<div id="html_a5a76b8da2f812c2dbf139345784fe7a" style="width: 100.0%; height: 100.0%;">Ghana: High risk</div>`)[0];
+                popup_5ed7dcc045b446b259031b750b38f92f.setContent(html_a5a76b8da2f812c2dbf139345784fe7a);
+            
+        
+
+        marker_d3aa631e2b73f807f41ad2925ee64884.bindPopup(popup_5ed7dcc045b446b259031b750b38f92f)
+        ;
+
+        
+    
+    
+            marker_cluster_5763ecf275eb1f412d01d4e981a206df.addTo(map_f3ec97b2351aa6efe3fc04379ab2ae45);
+        
+</script>
+</html>

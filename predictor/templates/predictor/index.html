@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaria Predictor</title>
+    <style>
+        body {
+            background-image: url('https://miro.medium.com/v2/resize:fit:828/format:webp/1*Io3xo1BX9qwX7C-zobverQ.jpeg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-color: rgba(203, 207, 207, 0.511);
+            font-family: Arial, sans-serif;
+            color: black;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            font-size: 3em;
+            margin-top: 0;
+            color: black;
+        }
+        form {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 12px;
+            margin-left: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            color: white;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        p, a {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        a {
+            color: #4CAF50;
+            display: block;
+            margin-top: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            color: #45a049;
+        }
+        div {
+            display: block;
+        }
+        .div {
+            margin-top: 480px;
+            padding: 20px;
+        }
+        .div1 {
+            color: white;
+            margin-left: 20px;
+        }
+        .prediction {
+            position: absolute;
+            top: 40%;
+        }
+    </style>
+</head>
+<body> 
+    <h1>Malaria Predictor</h1>
+    <div class="prediction">   
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Predict</button>
+            </form>
+            <div class="div1">
+                {% if result %}
+                <div>
+                    <p>{{ result }}</p>
+                    <p>{{ risk }}</p>
+                </div>
+                {% elif error %}
+                    <a>{{ error }}</a>
+                {% endif %}
+            </div>
+    </div>     
+    <div class="div">
+        <a href="{% url 'show_top10_map' %}">Map of the Top 10 Countries With High Risk of Malaria Outbreaks For 2024</a>
+        <a href="{% url 'show_all_map' %}">Map of All the Countries Malaria Risk Map</a>
+    </div>    
+        
+</body>
+</html>
