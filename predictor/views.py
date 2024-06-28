@@ -2,13 +2,14 @@ import pandas as pd
 import joblib
 import requests
 import folium
-from folium.plugins import MarkerCluster
+from folium.plugins import FastMarkerCluster
 from geopy.geocoders import Nominatim
 from django.shortcuts import render
 from .forms import CountryForm
 from django.core.cache import cache
+import logging
 
-
+logger = logging.getLogger(__name__)
 
 # Load preprocessor and model
 preprocessor = joblib.load('preprocessor.pkl')
@@ -57,229 +58,89 @@ def get_world_bank_data(country_code, indicator):
     response = requests.get(url)
     
     if response.status_code != 200:
-        print(f"Failed to get data from World Bank API for {indicator}. Status code: {response.status_code}")
+        print(f"Failed to get data from World Bank API. Status code: {response.status_code}")
         return None
     
     data = response.json()
-    
-    if not data or len(data) < 2 or not data[1]:
-        print(f"No data found for {indicator} from World Bank API.")
-        return None
-    
-    for entry in data[1]:
-        if entry.get('value') is not None:
-            return entry['value']
-    
-    print(f"No valid value found for {indicator} from World Bank API.")
-    return None
-
-# Function to get malaria data from WHO CSV
-def get_malaria_data(country_name, year):
-    record = malaria_data[(malaria_data['Country'].str.lower() == country_name.lower()) & (malaria_data['Year'] == 2021)]
-    if not record.empty:
-        print("Malaria data:")
-        print(record.iloc[0])
-        return record.iloc[0].to_dict()
+    if 'value' in data[1][0]:
+        return data[1][0]['value']
     else:
-        print(f"No malaria data found for {country_name} in {year}.")
         return None
 
-# Function to get latitude, longitude and continent using OpenCage Geocoding API
-def get_lat_lon_continent(country_name, api_key):
-    url = f"https://api.opencagedata.com/geocode/v1/json?q={country_name}&key={api_key}"
-    response = requests.get(url)
-    data = response.json()
-    
-    if data['results']:
-        geometry = data['results'][0]['geometry']
-        components = data['results'][0]['components']
-        latitude = geometry['lat']
-        longitude = geometry['lng']
-        continent = components.get('continent', 'Unknown')
-        print(f"Geolocation data: Latitude: {latitude}, Longitude: {longitude}, Continent: {continent}")
-        return latitude, longitude, continent
-    else:
-        print(f"Could not get geolocation for {country_name}. Response: {data}")
-        return None, None, None
-    
-
-def malaria_risk_map(request):
-    return render(request, 'predictor/malaria_risk_map.html')
-
-# Function to get country information
-def get_country_info(country_code, country_name):
-    latitude, longitude, continent = get_lat_lon_continent(country_name, geocoding_api_key)
-    if latitude is None or longitude is None:
-        return None
-
-    country_info = {
-        'ISO': country_code,
-        'Country': country_name,
-        'Year': 2024,
-        'Latitude': latitude,
-        'Longitude': longitude,
-        'Continent': continent
-    }
-    
-    # Fetch and handle possible missing data
+# Function to get latitude, longitude, and continent for a country
+def get_lat_lon_continent(country_name):
     try:
-        population = get_world_bank_data(country_code, 'SP.POP.TOTL') or 0
-        gdp = get_world_bank_data(country_code, 'NY.GDP.MKTP.CD') or 0
-        country_info['TPopulation'] = population
-        country_info['TPopulationMale'] = get_world_bank_data(country_code, 'SP.POP.TOTL.MA.IN') or 0
-        country_info['TPopulationFemale'] = get_world_bank_data(country_code, 'SP.POP.TOTL.FE.IN') or 0
-        country_info['GDP'] = gdp / population if population else 0        
-        malaria_info = get_malaria_data(country_name, 2024)
-        if malaria_info:
-            country_info['Deaths'] = malaria_info['Deaths']
-            country_info['Mortality_Rate'] = malaria_info['Mortality_Rate']
-            country_info['Malaria_incidence'] = malaria_info['Malaria_incidence']
+        # Retrieve the latitude, longitude, and continent using the OpenCage Geocoding API
+        geolocator = Nominatim(user_agent="my_app")
+        location = geolocator.geocode(country_name)
+        if location:
+            return location.point.latitude, location.point.longitude, location.address.split(", ")[-1]
         else:
-            return None
-        
-        country_info['Healthcare Access Quality'] = get_world_bank_data(country_code, 'SH.UHC.SRVS.CV.XD') or 0  # health expenditure per capita
-        country_info['Hospital_beds'] = get_world_bank_data(country_code, 'SH.MED.BEDS.ZS') or 0  # hospital beds per 1000
-    except ValueError as e:
-        print(e)
-        return None
-    
-    # Get weather data
-    try:
-        avg_temp_c, precipitation_mm = get_weather_data(latitude, longitude, weather_api_key)
-        country_info['avg_temp_c'] = avg_temp_c
-        country_info['precipitation_mm'] = precipitation_mm
+            return None, None, None
     except Exception as e:
-        print(e)
-        return None
-    
-    return country_info
+        logger.error(f"Error getting geolocation for {country_name}: {e}")
+        return None, None, None
 
-# Function to predict malaria
-def predict_malaria(user_data):
-    user_data_preprocessed = preprocessor.transform(user_data)
-    prediction = model.predict(user_data_preprocessed)
-    # Set negative predictions to zero
-    prediction = max(prediction[0], 0)
-    return prediction
-
-# Function to assess safety
-def assess_safety(malaria_cases):
-    if malaria_cases <= 100:
-        return "Low risk"
-    elif malaria_cases <= 1000:
-        return "Medium risk"
-    else:
-        return "High risk"
-
-
-def index(request):
-    if request.method == 'POST':
-        form = CountryForm(request.POST)
-        if form.is_valid():
-            country_name = form.cleaned_data['country'].strip().lower()
-            country_code = country_to_iso.get(country_name)
-
-            if not country_code:
-                return render(request, 'predictor/index.html', {'form': form, 'error': 'Country not found in the list.'})
-
-            country_info = get_country_info(country_code, country_name.title())
-            if not country_info:
-                return render(request, 'predictor/index.html', {'form': form, 'error': 'Failed to retrieve all necessary data.'})
-
-            user_data = pd.DataFrame([country_info])
-            malaria_cases = predict_malaria(user_data)
-            risk_level = assess_safety(malaria_cases)
-
-            return render(request, 'predictor/index.html', {'form': form, 'result': f'Predicted malaria cases: {malaria_cases:.2f}', 'risk': f'Risk level: {risk_level}'})
-    else:
-        form = CountryForm()
-
-    return render(request, 'predictor/index.html', {'form': form})
-
-# Function to generate a map for the top 10 countries with high risk of malaria outbreaks
-def show_top10_map(request):
-    cached_map = cache.get('top10_map')
-    if cached_map:
-        return render(request, 'predictor/malaria_top10_map.html')
-
-    geolocator = Nominatim(user_agent="malaria_predictor")
-    world_map = folium.Map(location=[0, 0], zoom_start=2)
-    marker_cluster = MarkerCluster().add_to(world_map)
-
-    # Sort countries by the highest predicted malaria cases
-    country_risks = []
-    for country, iso in country_to_iso.items():
-        try:
-            country_info = get_country_info(iso, country.title())
-            if not country_info:
-                continue
-
-            user_data = pd.DataFrame([country_info])
-            malaria_cases = predict_malaria(user_data)
-            country_risks.append((country.title(), malaria_cases, country_info['Latitude'], country_info['Longitude']))
-        except Exception as e:
-            print(f"Error processing {country}: {e}")
-            continue
-
-    # Sort and select top 10 countries
-    country_risks.sort(key=lambda x: x[1], reverse=True)
-    top10_countries = country_risks[:10]
-
-    for country, malaria_cases, lat, lon in top10_countries:
-        risk_level = assess_safety(malaria_cases)
-        if risk_level == "High risk":
-            color = 'red'
-        elif risk_level == "Medium risk":
-            color = 'orange'
-        else:
-            color = 'green'
-
-        folium.Marker(
-            location=[lat, lon],
-            popup=f"{country}: {risk_level}",
-            icon=folium.Icon(color=color)
-        ).add_to(marker_cluster)
-
-    world_map.save('predictor/static/predictor/malaria_top10_map.html')
-    cache.set('top10_map', 'predictor/static/predictor/malaria_top10_map.html', timeout=60*60*24)  # Cache for 24 hours
-    return render(request, 'predictor/malaria_top10_map.html')
-
-# Function to generate a map for all countries with malaria risk levels
 def show_all_map(request):
-    cached_map = cache.get('all_map')
-    if cached_map:
-        return render(request, 'predictor/malaria_all_map.html')
+    try:
+        # Try to get the map from the cache
+        map_html = cache.get('all_map_html')
+        if map_html:
+            return render(request, 'map.html', {'map': map_html})
 
-    geolocator = Nominatim(user_agent="malaria_predictor")
-    world_map = folium.Map(location=[0, 0], zoom_start=2)
-    marker_cluster = MarkerCluster().add_to(world_map)
+        # Generate the map
+        m = folium.Map(location=[0, 0], zoom_start=2)
+        marker_cluster = FastMarkerCluster(name='Malaria Incidents').add_to(m)
 
-    for country, iso in country_to_iso.items():
-        try:
-            country_info = get_country_info(iso, country.title())
-            if not country_info:
-                continue
+        for _, row in malaria_data.iterrows():
+            country = row['Country']
+            latitude, longitude, continent = get_lat_lon_continent(country)
+            if latitude is not None and longitude is not None:
+                folium.Marker(
+                    location=[latitude, longitude],
+                    popup=f"{country}: {row['Malaria_incidence']}",
+                    icon=folium.Icon(color='red')
+                ).add_to(marker_cluster)
 
-            user_data = pd.DataFrame([country_info])
-            malaria_cases = predict_malaria(user_data)
-            risk_level = assess_safety(malaria_cases)
+        map_html = m.get_root().render()
+        cache.set('all_map_html', map_html, timeout=3600)  # Cache the map for 1 hour
+        return render(request, 'map.html', {'map': map_html})
 
-            if risk_level == "High risk":
-                color = 'red'
-            elif risk_level == "Medium risk":
-                color = 'orange'
-            else:
-                color = 'green'
+    except Exception as e:
+        # Log the error
+        logger.error(f"Error generating all map: {e}")
+        return render(request, 'map.html', {'error': 'An error occurred while generating the map.'})
 
-            folium.Marker(
-                location=[country_info['Latitude'], country_info['Longitude']],
-                popup=f"{country.title()}: {risk_level}",
-                icon=folium.Icon(color=color)
-            ).add_to(marker_cluster)
-        except Exception as e:
-            print(f"Error processing {country}: {e}")
-            continue
 
-    world_map.save('predictor/static/predictor/malaria_all_map.html')
-    cache.set('all_map', 'predictor/static/predictor/malaria_all_map.html', timeout=60*60*24)  # Cache for 24 hours
-    return render(request, 'predictor/malaria_all_map.html')
+def show_top10_map(request):
+    try:
+        # Try to get the map from the cache
+        map_html = cache.get('top10_map_html')
+        if map_html:
+            return render(request, 'map.html', {'map': map_html})
+
+        # Generate the top 10 countries by malaria incidence
+        top10 = malaria_data.nlargest(10, 'Malaria_incidence')
+
+        # Create the map
+        m = folium.Map(location=[0, 0], zoom_start=2)
+        marker_cluster = FastMarkerCluster(name='Top 10 Malaria Incidents').add_to(m)
+
+        for _, row in top10.iterrows():
+            country = row['Country']
+            latitude, longitude, continent = get_lat_lon_continent(country)
+            if latitude is not None and longitude is not None:
+                folium.Marker(
+                    location=[latitude, longitude],
+                    popup=f"{country}: {row['Malaria_incidence']}",
+                    icon=folium.Icon(color='red')
+                ).add_to(marker_cluster)
+
+        map_html = m.get_root().render()
+        cache.set('top10_map_html', map_html, timeout=3600)  # Cache the map for 1 hour
+        return render(request, 'map.html', {'map': map_html})
+
+    except Exception as e:
+        # Log the error
+        logger.error(f"Error generating top 10 map: {e}")
+        return render(request, 'map.html', {'error': 'An error occurred while generating the map.'})
