@@ -11,8 +11,8 @@ from django.core.cache import cache
 
 
 # Load preprocessor and model
-preprocessor = joblib.load('C:/Users/kelvi/OneDrive/Desktop/Capstone Project/New folder (2)/malaria_predictor_project/preprocessor.pkl')
-model = joblib.load('C:/Users/kelvi/OneDrive/Desktop/Capstone Project/New folder (2)/malaria_predictor_project/gradient_boosting_model.pkl')
+preprocessor = joblib.load('preprocessor.pkl')
+model = joblib.load('gradient_boosting_model.pkl')
 
 # OpenWeather API key
 weather_api_key = '237c75a26646cfb183bca03f1662cbfd'
@@ -20,7 +20,7 @@ weather_api_key = '237c75a26646cfb183bca03f1662cbfd'
 geocoding_api_key = 'e7db2f2a540c47afa09af361d40f1222'
 
 # Load malaria data from WHO
-malaria_data = pd.read_csv('C:/Users/kelvi/OneDrive/Desktop/Capstone Project/New folder (2)/malaria_predictor_project/merged_without_city_1.csv')
+malaria_data = pd.read_csv('merged_without_city_1.csv')
 malaria_data = malaria_data[['Country','ISO', 'Year', 'Deaths', 'Mortality_Rate', 'Malaria_incidence']]
 # Create a dictionary for country name to ISO code mapping
 country_to_iso = dict(zip(malaria_data['Country'].str.lower(), malaria_data['ISO']))
