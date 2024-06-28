@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-w6)65bvq$n6-e5dt$&e%@e3d2%328a#5l!@gjhsiak(o&xns34
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['malaria-predictor-7dib.onrender.com']
 
 
 # Application definition
