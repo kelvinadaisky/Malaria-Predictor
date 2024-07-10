@@ -18,7 +18,6 @@ This application uses historical data and various features such as population de
 - Pandas
 - Scikit-learn
 - Joblib
-- AWS EC2
 - Git
 
 ## Data Sources
